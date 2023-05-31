@@ -12,6 +12,8 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { AuthService } from '~modules/auth/shared/auth.service';
@@ -31,7 +33,6 @@ import { EventBCType, EventBusService } from '~modules/shared/services/event-bus
 import { AuthRepository } from '~modules/auth/store/auth.repository';
 import { NgIf } from '@angular/common';
 import { FormErrorsComponent } from '~modules/shared/components/form-errors/form-errors.component';
-import { LanguageSelectorComponent } from '~modules/auth/shared/components/language-selector/language-selector.component';
 import { TrimDirective } from '~modules/shared/directives/trim.directive';
 import { LowercaseDirective } from '~modules/shared/directives/lowercase.directive';
 import { IAppConfig } from '../../../../configs/app-config.interface';
@@ -46,7 +47,6 @@ import { IAppConfig } from '../../../../configs/app-config.interface';
     RouterLink,
     FormErrorsComponent,
     ReactiveFormsModule,
-    LanguageSelectorComponent,
     TrimDirective,
     LowercaseDirective,
     NgIf,
@@ -58,11 +58,13 @@ export class RegisterPageComponent implements OnDestroy {
   isButtonRegisterLoading: boolean;
   showPassword: boolean;
   registerForm: FormGroup;
-  firstname: FormControl;
-  email: FormControl;
+  username: FormControl;
+  // email: FormControl;
   password: FormControl;
+  passwordConfirm: FormControl;
   terms: FormControl;
   private destroy$: Subject<boolean> = new Subject<boolean>();
+
 
   // eslint-disable-next-line max-params,max-lines-per-function
   constructor(
@@ -82,33 +84,49 @@ export class RegisterPageComponent implements OnDestroy {
     this.renderer.addClass(this.document.body, 'bg-linear');
     this.showPassword = false;
     this.isButtonRegisterLoading = false;
-    this.firstname = new FormControl<string | null>('', [
+    this.username = new FormControl<string | null>('', [
       Validators.required,
-      Validators.minLength(2),
+      Validators.minLength(8),
     ]);
-    this.email = new FormControl<string | null>('', [
-      Validators.required,
-      ValidationService.isEmailValidator(),
-    ]);
+    // this.email = new FormControl<string | null>('', [
+    //   Validators.required,
+    //   ValidationService.isEmailValidator(),
+    // ]);
     this.password = new FormControl<string | null>('', {
       validators: [
-        Validators.minLength(4),
+        Validators.minLength(8),
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{4,}'),
+      ],
+      updateOn: 'change',
+    });
+    this.passwordConfirm = new FormControl<string | null>('', {
+      validators: [
+        Validators.minLength(8),
+        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{4,}'),
+        this.confirmPasswordValidator.bind(this),
       ],
       updateOn: 'change',
     });
 
     this.terms = new FormControl<boolean | null>(false, [Validators.requiredTrue]);
     this.registerForm = this.formBuilder.group({
-      firstname: this.firstname,
-      email: this.email,
+      username: this.username,
+      // email: this.email,
       password: this.password,
       terms: this.terms,
+      passwordConfirm: this.passwordConfirm
     });
   }
 
+  confirmPasswordValidator: ValidatorFn = (control): ValidationErrors | null =>
+    control.value !== this.registerForm?.get('password')?.value ? { notMatching: true } : null;
+
   updatePassword() {
     this.password.updateValueAndValidity({ emitEvent: false });
+  }
+
+  updateConfirmPassword() {
+    this.passwordConfirm.updateValueAndValidity({ emitEvent: false });
   }
 
   sendForm() {
@@ -118,9 +136,10 @@ export class RegisterPageComponent implements OnDestroy {
       const formValue = this.registerForm.getRawValue();
       this.authService
         .signup({
-          firstname: formValue.firstname,
-          email: formValue.email,
+          username: formValue.username,
+          // email: formValue.email,
           password: formValue.password,
+          passwordConfirm: formValue.passwordConfirm
         })
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -135,7 +154,7 @@ export class RegisterPageComponent implements OnDestroy {
   }
 
   handleRegisterResponse(response: unknown) {
-    const user = (response as AuthUserData).user;
+    const user = (response as AuthUserData);
     if (user) {
       return this.router.navigate([userRoutes.dashboard]).then(() => {
         this.alertService.clearAll();

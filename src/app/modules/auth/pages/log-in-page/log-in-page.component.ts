@@ -31,7 +31,6 @@ import { EventBCType, EventBusService } from '~modules/shared/services/event-bus
 import { AuthRepository } from '~modules/auth/store/auth.repository';
 import { NgIf } from '@angular/common';
 import { FormErrorsComponent } from '~modules/shared/components/form-errors/form-errors.component';
-import { LanguageSelectorComponent } from '~modules/auth/shared/components/language-selector/language-selector.component';
 import { LowercaseDirective } from '~modules/shared/directives/lowercase.directive';
 import { TrimDirective } from '~modules/shared/directives/trim.directive';
 import { HttpClientModule } from '@angular/common/http';
@@ -48,7 +47,6 @@ import { IAppConfig } from '../../../../configs/app-config.interface';
     RouterLink,
     FormErrorsComponent,
     ReactiveFormsModule,
-    LanguageSelectorComponent,
     LowercaseDirective,
     TrimDirective,
     NgIf,
@@ -58,7 +56,7 @@ export class LogInPageComponent implements OnDestroy, AfterViewInit {
   authRoutes: typeof authRoutes;
   isButtonLogInLoading: boolean;
   logInForm: FormGroup;
-  email: FormControl;
+  username: FormControl;
   password: FormControl;
   window: Window;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -81,13 +79,13 @@ export class LogInPageComponent implements OnDestroy, AfterViewInit {
     this.window = this.document.defaultView as Window;
     this.authRoutes = authRoutes;
     this.isButtonLogInLoading = false;
-    this.email = new FormControl<string | null>('', [
+    this.username = new FormControl<string | null>('', [
       Validators.required,
-      ValidationService.isEmailValidator(),
+      Validators.minLength(8)
     ]);
     this.password = new FormControl<string | null>('', [Validators.required]);
     this.logInForm = this.formBuilder.group({
-      email: this.email,
+      username: this.username,
       password: this.password,
     });
   }
@@ -102,7 +100,7 @@ export class LogInPageComponent implements OnDestroy, AfterViewInit {
 
       const formValue = this.logInForm.getRawValue();
       this.authService
-        .logIn(formValue.email, formValue.password)
+        .logIn(formValue.username, formValue.password)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response: unknown) => {
@@ -118,7 +116,7 @@ export class LogInPageComponent implements OnDestroy, AfterViewInit {
   handleLogInResponse(response: unknown) {
     const origin = this.activatedRoute.snapshot.queryParams[AppConfig.customQueryParams.origin];
 
-    const user = (response as AuthUserData).user;
+    const user = (response as AuthUserData);
     if (user) {
       if (origin) {
         this.window.location.href = decodeURIComponent(origin);

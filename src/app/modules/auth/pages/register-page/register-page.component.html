@@ -4,16 +4,13 @@
       <div class="col-12">
         <main>
           <div class="card text-center register-page__card mx-auto py-3 position-relative">
-            <div class="card__header text-end m-0 p-0 pe-4 position-absolute">
-              <app-language-selector></app-language-selector>
-            </div>
             <div class="card-body">
               <div class="row mb-4">
                 <div class="col-12 d-flex justify-content-center">
-                  <img alt="Home" class="ng-star-inserted" src="/assets/icons/icon-128x128.png" />
+                  <!-- <img alt="Home" class="ng-star-inserted" src="/assets/icons/icon-128x128.png" /> -->
                 </div>
               </div>
-              <h1 class="mb-5" i18n>¡Register, and create your first hero!</h1>
+              <h1 class="mb-5" i18n>アカウント作成</h1>
               <form
                 #registerFormRef="ngForm"
                 (ngSubmit)="sendForm()"
@@ -24,7 +21,7 @@
                 <div class="col-12 col-md-10">
                   <div class="form-floating mb-3">
                     <input
-                      [formControl]="firstname"
+                      [formControl]="username"
                       class="form-control"
                       id="floating-first-name"
                       maxlength="150"
@@ -35,15 +32,15 @@
                       type="text" />
                     <label class="text-start" for="floating-first-name">
                       <i class="icon fa-solid fa-circle-user me-1"></i>
-                      <ng-container i18n>First name</ng-container>
+                      <ng-container i18n>ユーザーID</ng-container>
                     </label>
                     <app-form-errors
-                      [control]="firstname"
+                      [control]="username"
                       [formRef]="registerFormRef"
                       class="invalid-feedback"></app-form-errors>
                   </div>
                 </div>
-                <div class="col-12 col-md-10">
+                <!-- <div class="col-12 col-md-10">
                   <div class="form-floating mb-3">
                     <input
                       [formControl]="email"
@@ -57,14 +54,14 @@
                       type="email" />
                     <label class="text-start" for="floating-email">
                       <i class="icon fa-solid fa-at"></i>
-                      Email
+                      Eメール
                     </label>
                     <app-form-errors
                       [control]="email"
                       [formRef]="registerFormRef"
                       class="invalid-feedback"></app-form-errors>
                   </div>
-                </div>
+                </div> -->
                 <div class="col-12 col-md-10 mb-3">
                   <div class="password-container">
                     <div class="form-floating">
@@ -80,7 +77,7 @@
                         required />
                       <label class="text-start" for="floating-password">
                         <i class="icon fa-solid fa-lock me-1"></i>
-                        <ng-container i18n>Password</ng-container>
+                        <ng-container i18n>パスワード</ng-container>
                       </label>
                       <app-form-errors
                         [control]="password"
@@ -96,6 +93,39 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="col-12 col-md-10 mb-3">
+                  <div class="password-container">
+                    <div class="form-floating">
+                      <input
+                        (keyup)="updateConfirmPassword()"
+                        [class.is-invalid]="passwordConfirm.errors && passwordConfirm.errors['passwordStrength']"
+                        [formControl]="passwordConfirm"
+                        [minLength]="6"
+                        [type]="showPassword ? 'text' : 'password'"
+                        class="form-control"
+                        id="floating-password"
+                        placeholder="パスワード確認用"
+                        required />
+                      <label class="text-start" for="floating-password">
+                        <i class="icon fa-solid fa-lock me-1"></i>
+                        <ng-container i18n>パスワード確認用</ng-container>
+                      </label>
+                      <app-form-errors
+                        [control]="passwordConfirm"
+                        [formRef]="registerFormRef"
+                        class="invalid-feedback"></app-form-errors>
+                    </div>
+                    <div class="password-eye-icon-container">
+                      <i
+                        (click)="togglePasswordType()"
+                        (keyup)="togglePasswordType()"
+                        [class.active]="showPassword"
+                        class="icon fa-solid fa-eye"></i>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="col-12 col-md-10">
                   <div class="form-check mb-4">
                     <input
@@ -132,12 +162,12 @@
                         class="spinner-border text-white spinner-border-sm me-1"
                         role="status"></span>
                     </ng-container>
-                    <ng-container i18n>Register</ng-container>
+                    <ng-container i18n>カウント作成</ng-container>
                   </button>
                 </div>
                 <div class="col-12">
                   <p>
-                    <span i18n>already have an account?</span>
+                    <span i18n>すでにアカウントをお持ちですか</span>
                     <a [routerLink]="authRoutes.logIn" class="register__login-link ms-1">
                       <ng-container i18n>log in</ng-container>
                       <i class="ms-1 icon fa-solid fa-right-long"></i>

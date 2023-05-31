@@ -51,7 +51,7 @@ export class DeleteAccountComponent implements OnDestroy {
   deleteAccountForm: FormGroup;
   password: FormControl;
   confirm: FormControl;
-  email: FormControl;
+  // email: FormControl;
   window: Window;
 
   // eslint-disable-next-line max-params
@@ -69,20 +69,20 @@ export class DeleteAccountComponent implements OnDestroy {
     this.numberOfHeroes = '-';
     this.isButtonDeleteAccountLoading = false;
     this.password = new FormControl<string | null>('');
-    this.email = new FormControl<string | null>('', [
-      Validators.required,
-      this.userEmailValidator.bind(this),
-    ]);
+    // this.email = new FormControl<string | null>('', [
+    //   Validators.required,
+    //   this.userEmailValidator.bind(this),
+    // ]);
     this.confirm = new FormControl<string | null>('', [this.confirmValidator.bind(this)]);
     this.deleteAccountForm = this.formBuilder.group({
-      email: this.email,
+      // email: this.email,
       password: this.password,
       confirm: this.confirm,
     });
   }
 
-  userEmailValidator: ValidatorFn = (control): ValidationErrors | null =>
-    control.value !== this.user?.email ? { notYourEmail: true } : null;
+  // userEmailValidator: ValidatorFn = (control): ValidationErrors | null =>
+  //   control.value !== this.user?.email ? { notYourEmail: true } : null;
 
   confirmValidator: ValidatorFn = (control): ValidationErrors | null => {
     const textToDeleteElement = this.window.document.getElementById('text-to-write');

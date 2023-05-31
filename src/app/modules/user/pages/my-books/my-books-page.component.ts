@@ -21,25 +21,26 @@ import { AlertId, AlertService } from '~modules/shared/services/alert.service';
 import { UtilService } from '~modules/shared/services/util.service';
 import { UserService } from '~modules/user/shared/user.service';
 import { Modal } from 'bootstrap';
-import { HeroModalComponent } from '~modules/user/components/hero-modal/hero-modal.component';
+import { Book } from '~modules/book/shared/book.model';
+import { BookModalComponent } from '~modules/user/components/book-modal/book-modal.component';
 
 @Component({
-  selector: 'app-my-heroes-page',
-  templateUrl: './my-heroes-page.component.html',
-  styleUrls: ['./my-heroes-page.component.scss'],
+  selector: 'app-my-books-page',
+  templateUrl: './my-books-page.component.html',
+  styleUrls: ['./my-books-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [NgIf, RouterLink, NgForOf, NgOptimizedImage, HeroModalComponent],
+  imports: [NgIf, RouterLink, NgForOf, NgOptimizedImage, BookModalComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class MyHeroesPageComponent implements OnInit, OnDestroy {
+export class MyBooksPageComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   user: User | undefined;
   window: Window;
   userHeroes: Hero[];
   trackHero: TrackByFunction<Hero>;
-  heroModal: Modal | undefined;
-  heroSelected: Hero | undefined;
+  bookModal: Modal | undefined;
+  bookSelected: Book | undefined;
 
   // eslint-disable-next-line max-params
   constructor(
@@ -64,37 +65,37 @@ export class MyHeroesPageComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.loadUserHeroes();
-    this.heroModal = new bootstrap.Modal('#hero-modal', {});
+    // this.loadUserHeroes();
+    this.bookModal = new bootstrap.Modal('#book-modal', {});
     this.changeDetectorRef.detectChanges();
   }
 
-  loadUserHeroes() {
-    this.userService
-      .getMe()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        if (user) {
-          // this.userHeroes = Object.assign([], user.heroes);
-          this.changeDetectorRef.markForCheck();
-        }
-      });
-  }
+  // loadUserHeroes() {
+  //   this.userService
+  //     .getMe()
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe(user => {
+  //       if (user) {
+  //         this.userHeroes = Object.assign([], user.heroes);
+  //         this.changeDetectorRef.markForCheck();
+  //       }
+  //     });
+  // }
 
-  openHeroModal(hero?: Hero) {
-    if (hero) {
-      this.heroSelected = hero;
+  openBookModal(book?: Book) {
+    if (book) {
+      this.bookSelected = book;
     } else {
-      this.heroSelected = new Hero({
+      this.bookSelected = new Book({
         id: '',
-        realName: '',
-        alterEgo: '',
-        image: 'no-id',
-        public: false,
-        usersVoted: [],
+        bookName: '',
+        category: '',
+        price: '',
+        releaseDate: new Date(),
+        author: ''
       });
     }
-    this.heroModal?.show();
+    this.bookModal?.show();
     this.changeDetectorRef.markForCheck();
   }
 

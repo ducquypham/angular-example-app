@@ -25,12 +25,13 @@ import { ChangePasswordResponse } from '~modules/auth/shared/interfaces/change-p
 import { DeleteAccountResponse } from '~modules/auth/shared/interfaces/delete-account-response.interface';
 import { AppConfig } from '../../../configs/app.config';
 import jwt_decode from 'jwt-decode';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private apollo: Apollo, private authRepository: AuthRepository) {}
+  constructor(private apollo: Apollo, private authRepository: AuthRepository, private http: HttpClient) {}
 
   static decodeToken(token: string): { exp: number } | null {
     try {
@@ -40,19 +41,12 @@ export class AuthService {
     }
   }
 
-  signup({ firstname, email, password }: RegisterPayload): Observable<AuthUserData | null> {
-    return this.apollo
-      .mutate({
-        mutation: signupMutation,
-        variables: {
-          firstname,
-          email,
-          password,
-        },
-      })
+  // signup({ username: firstname, email, password }: RegisterPayload): Observable<AuthUserData | null> {
+    signup({ username, password, passwordConfirm }: RegisterPayload): Observable<RegisterResponse | null> {
+    return this.http.post('/auth/register', {username, password, passwordConfirm})
       .pipe(
         map((response: unknown) => {
-          const registerData = (response as RegisterResponse).data?.signup;
+          const registerData = (response as RegisterResponse);
           if (registerData) {
             this.saveUserData(registerData);
             return registerData;
@@ -62,18 +56,11 @@ export class AuthService {
       );
   }
 
-  logIn(email: string, password: string): Observable<AuthUserData | null> {
-    return this.apollo
-      .mutate({
-        mutation: loginMutation,
-        variables: {
-          email,
-          password,
-        },
-      })
+  logIn(username: string, password: string): Observable<AuthUserData | null> {
+    return this.http.post('/auth/login', {username, password})
       .pipe(
         map((response: unknown) => {
-          const loginData = (response as LogInResponse).data?.login;
+          const loginData = (response as LogInResponse)
           if (loginData) {
             this.saveUserData(loginData);
             return loginData;
@@ -140,35 +127,8 @@ export class AuthService {
       );
   }
 
-  refreshToken(): Observable<UpdateTokenData | null> {
-    const refreshToken = this.authRepository.getRefreshTokenValue() || '';
-    return this.apollo
-      .mutate({
-        mutation: refreshTokenMutation,
-        context: {
-          headers: { [AppConfig.bypassAuthorization]: 'true' },
-        },
-        variables: {
-          refreshToken,
-        },
-      })
-      .pipe(
-        map((response: unknown) => {
-          const refreshTokenData = (response as RefreshTokenResponse).data?.refreshToken;
-          if (refreshTokenData) {
-            this.authRepository.updateTokens(
-              refreshTokenData.accessToken,
-              refreshTokenData.refreshToken
-            );
-            return refreshTokenData;
-          }
-          return null;
-        })
-      );
-  }
-
-  private saveUserData(userData: AuthUserData) {
-    this.authRepository.updateTokens(userData.accessToken, userData.refreshToken);
-    this.authRepository.setUser(userData.user);
+  private saveUserData(userData: RegisterResponse) {
+    this.authRepository.updateTokens(userData.token);
+    this.authRepository.setUser(userData);
   }
 }

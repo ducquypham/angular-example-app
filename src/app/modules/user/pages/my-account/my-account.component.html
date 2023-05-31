@@ -16,11 +16,9 @@
           <div class="col-12 col-md-auto pt-2 px-3">
             <div class="flex-grow-1">
               <p class="my-account__user-name d-block mb-2">
-                {{ user.firstname }}
+                {{ user.username }}
               </p>
-              <small class="d-block mb-1">
-                {{ user.email }}
-              </small>
+     
               <small class="d-block mb-1" i18n>Free plan</small>
             </div>
           </div>
@@ -52,7 +50,6 @@
               id="flush-collapseOne">
               <div *ngIf="user" class="accordion-body px-0 pt-lg-1 text-center text-lg-start mb-4">
                 <app-edit-profile [user]="user"></app-edit-profile>
-                <app-change-password></app-change-password>
               </div>
             </div>
           </div>
@@ -72,9 +69,6 @@
               aria-labelledby="flush-headingThree"
               class="accordion-collapse collapse"
               id="flush-collapseThree">
-              <div *ngIf="user" class="accordion-body px-0 pt-lg-1 text-center text-lg-start mb-4">
-                <app-change-language [user]="user"></app-change-language>
-              </div>
             </div>
           </div>
           <div class="accordion-item">

@@ -1,4 +1,4 @@
 export interface UpdateUserData {
-  firstname?: string;
+  username?: string;
   language?: string;
 }

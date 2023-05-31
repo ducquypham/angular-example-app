@@ -4,7 +4,7 @@
       <h1 class="text-center mb-4" i18n>私の本</h1>
       <div class="row mb-3">
         <div class="col-12">
-          <button (click)="openHeroModal()" class="btn btn-primary px-2 px-md-3">
+          <button (click)="openBookModal()" class="btn btn-primary px-2 px-md-3">
             <ng-container i18n>登録</ng-container>
           </button>
         </div>
@@ -19,8 +19,8 @@
               <thead>
                 <tr>
                   <th scope="col"></th>
-                  <th i18n scope="col">Alter-ego</th>
-                  <th i18n scope="col">Real name</th>
+                  <th i18n scope="col">本名</th>
+                  <th i18n scope="col">カテゴリー</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
@@ -50,8 +50,8 @@
     </div>
   </div>
 </div>
-<app-hero-modal
-  [heroSelected]="heroSelected"
+<app-book-modal
+  [bookSelected]="bookSelected"
   [heroesList]="userHeroes"
-  [modal]="heroModal"
-  [user]="user"></app-hero-modal>
+  [modal]="bookModal"
+  [user]="user"></app-book-modal>

@@ -111,20 +111,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   handleRouteEvent(event: Event) {
     if (event instanceof NavigationEnd) {
-      const refreshToken = this.authRepository.getRefreshTokenValue();
-      if (refreshToken) {
-        const refreshTokenValue = AuthService.decodeToken(refreshToken);
-        const isRefreshTokenExpired = Date.now() >= (refreshTokenValue?.exp || 0) * 1000;
-        if (isRefreshTokenExpired && !event.url.includes(authRoutes.logout)) {
-          this.router.navigate([authRoutes.logout], {
-            queryParams: {
-              origin: encodeURIComponent(this.window.location.href),
-              alertId: AlertId.SESSION_EXPIRED,
-            },
-          });
-        }
-      }
-
       const alertId = this.activatedRoute.snapshot.queryParams[AppConfig.customQueryParams.alertId];
       if (alertId) {
         this.alertService.create(alertId);
@@ -148,29 +134,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   checkAccessToken() {
     const accessToken = this.authRepository.getAccessTokenValue();
-    const refreshToken = this.authRepository.getRefreshTokenValue();
-
-    if (accessToken && refreshToken) {
+    if (accessToken ) {
       const accessTokenValue = AuthService.decodeToken(accessToken);
       const isAccessTokenExpired = Date.now() >= (accessTokenValue?.exp || 0) * 1000;
-      const refreshTokenValue = AuthService.decodeToken(refreshToken);
-      const isRefreshTokenExpired = Date.now() >= (refreshTokenValue?.exp || 0) * 1000;
+     
       if (isAccessTokenExpired) {
-        if (!isRefreshTokenExpired) {
-          this.authService
-            .refreshToken()
-            .pipe(
-              takeUntil(this.destroy$),
-              catchError((error): ObservableInput<HttpEvent<unknown>> => {
-                this.navigateToLogout();
-                return observableThrowError(error);
-              })
-            )
-            .subscribe();
-        } else {
           this.navigateToLogout();
           return observableThrowError(() => new Error());
-        }
       }
     }
 

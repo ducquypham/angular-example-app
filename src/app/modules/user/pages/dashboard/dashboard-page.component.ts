@@ -63,7 +63,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.authRepository.$user.pipe(takeUntil(this.destroy$)).subscribe(user => {
       if (user) {
         this.user = user;
-        this.checkUserLanguage();
       }
     });
 
@@ -71,14 +70,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges();
   }
 
-  checkUserLanguage() {
-    if (this.user?.language !== this.locale) {
-      this.window.location.href =
-        (this.user?.language && this.user.language !== AppConfig.defaultLang
-          ? `/${this.user.language}`
-          : '') + userRoutes.dashboard;
-    }
-  }
 
   loadPublicHeroes() {
     this.heroService

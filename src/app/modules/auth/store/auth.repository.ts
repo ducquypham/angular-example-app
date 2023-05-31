@@ -16,8 +16,7 @@ export class AuthRepository {
       { name: 'auth' },
       withProps<AuthProps>({
         user: null,
-        accessToken: null,
-        refreshToken: null,
+        token: null,
       })
     );
 
@@ -30,15 +29,11 @@ export class AuthRepository {
   }
 
   getAccessTokenValue() {
-    return this.authStore.getValue().accessToken;
+    return this.authStore.getValue().token;
   }
 
-  getRefreshTokenValue() {
-    return this.authStore.getValue().refreshToken;
-  }
-
-  updateTokens(accessToken: string, refreshToken: string) {
-    this.authStore.update(setProps({ accessToken, refreshToken }));
+  updateTokens(token: string) {
+    this.authStore.update(setProps({ token }));
   }
 
   setUser(user: User) {
@@ -49,7 +44,7 @@ export class AuthRepository {
   }
 
   isLoggedIn() {
-    return this.authStore.pipe(select(state => !!state.accessToken));
+    return this.authStore.pipe(select(state => !!state.token));
   }
 
   isLoggedInValue(): boolean {
@@ -65,6 +60,6 @@ export class AuthRepository {
   }
 
   clear() {
-    this.authStore.update(setProps({ user: null, accessToken: null, refreshToken: null }));
+    this.authStore.update(setProps({ user: null, token: null }));
   }
 }

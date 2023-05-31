@@ -4,16 +4,13 @@
       <div class="col-12">
         <main>
           <div class="card text-center login-page__card mx-auto py-3 position-relative">
-            <div class="card__header text-end m-0 p-0 pe-4 position-absolute">
-              <app-language-selector></app-language-selector>
-            </div>
             <div class="card-body">
               <div class="row mb-4">
                 <div class="col-12 d-flex justify-content-center">
-                  <img alt="Home" class="ng-star-inserted" src="/assets/icons/icon-128x128.png" />
+                  <!-- <img alt="Home" class="ng-star-inserted" src="/assets/icons/icon-128x128.png" /> -->
                 </div>
               </div>
-              <h1 class="mb-5" i18n>¡Welcome back!</h1>
+              <h1 class="mb-5" i18n>Welcome back!</h1>
               <form
                 #loginFormRef="ngForm"
                 (ngSubmit)="sendForm()"
@@ -24,20 +21,19 @@
                 <div class="col-12 col-md-10">
                   <div class="form-floating mb-3">
                     <input
-                      [formControl]="email"
+                      [formControl]="username"
                       class="form-control"
                       id="floating-email"
-                      lowercase
                       maxlength="150"
                       placeholder="name@example.com"
                       required
                       trim
-                      type="email" />
+                      type="username" />
                     <label class="text-start" for="floating-email"
-                      ><i class="icon fa-solid fa-at me-1"></i>Email</label
+                      ><i class="icon fa-solid fa-at me-1"></i>ユーザーID</label
                     >
                     <app-form-errors
-                      [control]="email"
+                      [control]="username"
                       [formRef]="loginFormRef"
                       class="invalid-feedback"></app-form-errors>
                   </div>
@@ -51,12 +47,12 @@
                       class="form-control"
                       id="floating-password"
                       minlength="8"
-                      placeholder="Password"
+                      placeholder="パスワード"
                       required
                       type="password" />
                     <label class="text-start" for="floating-password"
                       ><i class="icon fa-solid fa-lock me-1"></i>
-                      <ng-container i18n>Password</ng-container></label
+                      <ng-container i18n>パスワード</ng-container></label
                     >
                     <app-form-errors
                       [control]="password"
@@ -76,14 +72,14 @@
                         class="spinner-border text-white spinner-border-sm me-1"
                         role="status"></span>
                     </ng-container>
-                    <ng-container i18n>Enter</ng-container>
+                    <ng-container i18n>ログイン</ng-container>
                   </button>
                 </div>
                 <div class="col-12">
                   <p>
-                    <span i18n>don't have an account yet?</span>
+                    <span i18n>新しいアカウント作成</span>
                     <a [routerLink]="authRoutes.register" class="ms-1">
-                      <ng-container i18n>register</ng-container>
+                      <ng-container i18n>登録</ng-container>
                       <i class="ms-1 icon fa-solid fa-right-long"></i>
                     </a>
                   </p>

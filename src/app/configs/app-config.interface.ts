@@ -7,7 +7,7 @@ export interface IAppConfig {
     alertId: string;
   };
   languages: {
-    es: string;
+    ja: string;
     en: string;
   };
   breakpoints: {

@@ -42,10 +42,6 @@ export class LogoutPageComponent implements OnInit, OnDestroy {
 
     this.authRepository.$user.pipe(takeUntil(this.destroy$)).subscribe(user => {
       let langToRedirect = '';
-      if (user && user.language !== AppConfig.defaultLang) {
-        langToRedirect = `/${user.language}`;
-      }
-
       this.authRepository.clear();
 
       const path = new URL(`${environment.domain}${langToRedirect || ''}${authRoutes.logIn}`);

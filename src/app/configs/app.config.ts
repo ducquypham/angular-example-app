@@ -12,7 +12,7 @@ export const AppConfig: IAppConfig = {
     alertId: 'alertId',
   },
   languages: {
-    es: 'es',
+    ja: 'ja',
     en: 'en',
   },
   breakpoints: {

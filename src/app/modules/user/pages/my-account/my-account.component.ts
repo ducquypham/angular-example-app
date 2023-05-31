@@ -7,7 +7,6 @@ import { APP_CONFIG } from '../../../../configs/app.config';
 import { IAppConfig } from '../../../../configs/app-config.interface';
 import { EditProfileComponent } from '~modules/user/components/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from '~modules/user/components/change-password/change-password.component';
-import { ChangeLanguageComponent } from '~modules/user/components/change-language/change-language.component';
 import { DeleteAccountComponent } from '~modules/user/components/delete-account/delete-account.component';
 
 @Component({
@@ -21,7 +20,6 @@ import { DeleteAccountComponent } from '~modules/user/components/delete-account/
     UpperCasePipe,
     EditProfileComponent,
     ChangePasswordComponent,
-    ChangeLanguageComponent,
     DeleteAccountComponent,
   ],
 })

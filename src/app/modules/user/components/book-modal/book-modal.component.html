@@ -1,0 +1,86 @@
+<div aria-hidden="true" aria-labelledby="book" class="modal fade" id="book-modal" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div *ngIf="bookSelected" class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="hero">
+          <ng-container *ngIf="!bookSelected.id" i18n>書籍登録</ng-container>
+          <ng-container *ngIf="bookSelected.id" i18n>Edit</ng-container> {{ bookSelected.bookName }}
+        </p>
+        <button (click)="closeModal()" aria-label="Close" class="btn-close" type="button">
+          <i class="icon fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <form #bookFormRef="ngForm" (submit)="sendForm()" *ngIf="bookForm"
+          [class.needs-validation]="!bookFormRef.submitted" [class.was-validated]="bookFormRef.submitted"
+          [formGroup]="bookForm" class="exchange-form-container mx-auto">
+          <div *ngIf="bookName" class="mb-4">
+            <div class="form-floating mb-3">
+              <input [formControl]="bookName" class="form-control" id="floating-book-name" maxlength="150" minlength="2"
+                required trim type="text" />
+              <label class="text-start" for="floating-first-name">
+                <ng-container i18n>本名</ng-container>
+              </label>
+              <app-form-errors [control]="bookName" [formRef]="bookFormRef" class="invalid-feedback"></app-form-errors>
+            </div>
+          </div>
+          <div *ngIf="category" class="mb-4">
+            <div class="form-floating mb-3">
+              <select class="form-control" id="floating-book-category" [formControl]="category">
+                <option value="SHA-256">SHA-256</option>
+                <option value="SCRYPT">SCRYPT</option>
+                <option value="ETHASH">ETHASH</option>
+                <option value="CRYPTONIGH">CRYPTONIGHT</option>
+                <option value="X11">X11</option>
+              </select>
+              <label class="text-start" for="floating-book-category">
+                <ng-container i18n>カテゴリー</ng-container>
+              </label>
+              <app-form-errors [control]="category" [formRef]="bookFormRef" class="invalid-feedback"></app-form-errors>
+            </div>
+          </div>
+          <div *ngIf="price" class="mb-4">
+            <div class="form-floating mb-3">
+              <input [formControl]="price" class="form-control" id="floating-book-price" maxlength="150" minlength="2"
+                required trim type="text" />
+              <label class="text-start" for="floating-book-price">
+                <ng-container i18n>価格</ng-container>
+              </label>
+              <app-form-errors [control]="price" [formRef]="bookFormRef" class="invalid-feedback"></app-form-errors>
+            </div>
+          </div>
+          <div *ngIf="releaseDate" class="mb-4">
+            <div class="form-floating mb-3">
+              <input [formControl]="releaseDate" class="form-control" id="floating-book-release-date" maxlength="150"
+                minlength="2" required trim type="text" />
+              <label class="text-start" for="floating-book-release-date">
+                <ng-container i18n>発売日</ng-container>
+              </label>
+              <app-form-errors [control]="releaseDate" [formRef]="bookFormRef"
+                class="invalid-feedback"></app-form-errors>
+            </div>
+          </div>
+          <div *ngIf="author" class="mb-4">
+            <div class="form-floating mb-3">
+              <input [formControl]="author" class="form-control" id="floating-book-author" maxlength="150" minlength="2"
+                required trim type="text" />
+              <label class="text-start" for="floating-first-author">
+                <ng-container i18n>作家</ng-container>
+              </label>
+              <app-form-errors [control]="author" [formRef]="bookFormRef" class="invalid-feedback"></app-form-errors>
+            </div>
+          </div>
+          <div class="modal-footer pb-4">
+            <button [class.is-loading-primary]="isButtonLoading" [disabled]="isButtonLoading || !bookSelected"
+              class="btn btn-primary px-2 px-md-3 mt-n2">
+              <ng-container *ngIf="isButtonLoading">
+                <span aria-hidden="true" class="spinner-border text-white spinner-border-sm me-1" role="status"></span>
+              </ng-container>
+              <ng-container i18n>登録</ng-container>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
